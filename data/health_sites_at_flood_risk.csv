@@ -1,0 +1,59 @@
+﻿abandoned,addr:city,addr:country,addr:district,addr:housename,addr:housenumber,addr:neighbourhood,addr:postcode,addr:province,addr:street,alt_name,amenity,area,barrier,beds,brand,brand:wikidata,building,building:colour,building:levels,building:levels:underground,check_date,contact:facebook,contact:instagram,contact:phone,contact:twitter,contact:youtube,description,designation,disease:covid19,email,emergency,fax,healthcare,healthcare:speciality,height,helipad,hospital,internet_access,level,long_name,mobile,name,name:en,name:ku,name:ru,name:tr,not:operator:wikidata,note,official_name,old_name,opening_date,opening_hours,operator,operator:type,operator:wikidata,operator:wikipedia,phone,rehabilitation:type,roof:colour,roof:height,roof:material,roof:shape,short_name,smoking,source,start_date,url,website,wheelchair,wikidata,wikimedia_commons,wikipedia,osm_id,longitude,latitude
+,,,,,,,,,,,clinic,,,,,,,,,,,,,,,,,,,,,,clinic,,,,,,,,,,,,,,,No emergency!,,,,,,,,,,,,,,,,,,,,,,,,,3890716143,32.8096719,39.9943679
+,Keçiören/Ankara,,,,,,,,Asya Sokak,,clinic,,,,,,,,,,,,,,,,,,,,,,clinic,,,,,,,,,Asya Aile Sağlığı Merkezi,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4076349292,32.862321,40.0002747
+,Keçiören/Ankara,,,,,,,,Gürkan Sokak,,clinic,,,,,,,,,,,,,,,,,,,,,,clinic,,,,,,,,,Şenlik Aile Sağlığı Merkezi,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4078116504,32.8736559,39.9938408
+,Keçiören/Ankara,,,,,,,,,,clinic,,,,,,,,,,,,,,,,,,,,,,clinic,,,,,,,,,Gazeller Aile Sağlığı Merkezi,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4084939432,32.8463095,39.996933
+,Keçiören/Ankara,,,,,,,,,,clinic,,,,,,,,,,,,,,,,,,,,,,clinic,,,,,,,,,Barış Sitesi Aile Sağlığı Merkezi,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4085039207,32.8387014,39.982768
+,,,,,,,,,,,clinic,,,,,,,,,,,,,,,,,,,,no,,clinic,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4347235916,32.8137001,39.9941605
+,,,,,,,,,,,clinic,,,,,,,,,,,,,,,,,,,,,,clinic,,,,,,,,,Güneşevler Semt Polikliniği,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4393575503,32.8846772,39.971465
+,,,,,,,,,,,clinic,,,,,,,,,,,,,,,,,,,,no,,clinic,general,,,,,,,,Yenimahalle 6 Nolu Aile Sağlığı Merkezi,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,8825938837,32.7991013,39.9846941
+,,,,,,,,,,,hospital,,,,,,,,,,,,,,,,,,,,,,hospital,gynaecology,,,,,,,,Kadın Doğum Hastanesi,,,,,,,,,,,Sağlık Bakanlığı,government,Q4294365,,,,,,,,,,,,,,,,,,10077457875,32.8294212,39.96297469999998
+,,,,,,,,,,,hospital,,,,,,,,,,,,,,,,,,,,,,hospital,neurology;orthopaedics,,,,,,,,Ortopedi ve Nöroloji Hastanesi,,,,,,,,,,,Sağlık Bakanlığı,government,Q4294365,,,,,,,,,,,,,,,,,,10077457877,32.8314799,39.96589860000001
+,,,,,,,,,,,hospital,,,,,,,,,,,,,,,,,,,,,,hospital,,,,,,,,,"Göğüs, Kalp ve Damar Hastalıkları Hastanesi",,,,,,,,,,,Sağlık Bakanlığı,government,Q4294365,,,,,,,,,,,,,,,,,,10077457878,32.8306779,39.9671983
+,,,,,,,,,,,hospital,,,,,,,,,,,,,,,,,,,,,,hospital,general,,,,,,,,Genel Hastane,,,,,,,,,,,Sağlık Bakanlığı,government,Q4294365,,,,,,,,,,,,,,,,,,10077457879,32.8324801,39.9638523
+,,,,,,,,,,,hospital,,,,,,,,,,,,,,,,,,,,,,hospital,oncology,,,,,,,,Onkoloji Hastanesi,,,,,,,,,,,Sağlık Bakanlığı,government,Q4294365,,,,,,,,,,,,,,,,,,10077457880,32.8302516,39.961656
+,,,,,,,,,,,hospital,,,,,,,,,,,,,,,,,,,,yes,,hospital,gynaecology;paediatrics,,,,,,,,Kadın Doğum Ve Çocuk Acil,,,,,,,,,,24/7,Sağlık Bakanlığı,government,Q4294365,,,,,,,,,,,,,,,,,,10077470611,32.8290487,39.9640568
+,,,,,,,,,,,hospital,,,,,,,,,,,,,,,,,,,,,,hospital,,,,,,,,,Çocuk Hemodiyaliz,,,,,,,,,,,Sağlık Bakanlığı,government,Q4294365,,,,,,,,,,,,,,,,,,10080058032,32.8290858,39.9656233
+,,,,,,,,,,,hospital,,,,,,,,,,,,,,,,,,,,,,hospital,,,,,,,,,Hemodiyaliz,,,,,,,,,,,Sağlık Bakanlığı,government,Q4294365,,,,,,,,,,,,,,,,,,10159201121,32.8321434,39.9641333
+,,,,,,,,,,,hospital,,,,,,,,,,,,,,,,,,,,,,hospital,paediatrics,,,,,,,,Çocuk Hastanesi,,,,,,,,,,,Sağlık Bakanlığı,government,Q4294365,,,,,,,,,,,,,,,,,,10245508803,32.8284088,39.9649757
+,,,,,,,,,,,hospital,,,,,,,,,,,,,,,,,,,,,,hospital,psychiatry,,,,,,,,Psikiyatri Kliniği,,,,,,,,,,,Sağlık Bakanlığı,government,Q4294365,,,,,,,,,,,,,,,,,,10304290231,32.8239916,39.9612455
+,,,,,,,,,,,clinic,,,,,,,,,,,,,,,,,,,,,,clinic,,,,,,,,,ARSLAN ÇOCUK KLİNİĞİ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,11022512401,32.8858385,39.9730928
+,,,,,,,,,,,clinic,,,,,,,,,,,,,,,,,,,,,,clinic,,,,,,,,,Aydınlıkevler Aile Sağlığı Merkezi,,,,,,,,,,,T.C. Sağlık Bakanlığı,public,Q4294365,,,,,,,,,,,,,,,,,,11386192340,32.8806327,39.9603058
+,,,,,26,,06010,,Adnan Yüksel Caddesi,,clinic,,,,,,,,,,,,,,,,,,,,,,clinic,,,,,,,,,Adnan Yüksel ASM Aile Sağlığı Merkezi,,,,,,,,,,Mo-Fr 08:30-19:00,,,,,+90 312 326 59 60,,,,,,,,,,,,,,,,12378377401,32.8293264,39.9777553
+,,,,,17,,06280,,340. Cadde,,clinic,,,,,,,,,,,,,,,,,,,,,,clinic,,,,,,,,,Keçiören Aşık Veysel Aile Sağlığı Merkezi,,,,,,,,,,Mo-Fr 09:00-16:30,,,,,+90 312 378 00 86,,,,,,,,,,,,,,,,13015005201,32.8404649,40.0027638
+,,,,,,,,,,,hospital,,,,,,hospital,,,,,,,,,,,,,,yes,,hospital,,,,,,,,,Özel Ulus Hastanesi,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,217542916,32.8530502,39.9538484
+,,,,,,,,,,,hospital,,,,,,yes,,,,,,,,,,,,,,,,hospital,,,,,,,,,Deva Tıp Merkezi,,,,,,,,,,,,,,,,,,,,,,,Bing,,,,,,,,227701865,32.8222229,39.980181
+,,,,,,,,,,,clinic,,,,,,yes,,,,,,,,,,,,,,,,clinic,,,,,,,,,Göçmen Konutları Aile Sağlığı Merkezi,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,271776054,32.8891026,40.0268406
+,Keçiören/Ankara,,,,,,,,Devrek Sk,,clinic,,,,,,yes,,,,,,,,,,,,,,,,clinic,,,,,,,,,Şevket Sağlık Ocağı,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,313309260,32.8811668,39.9856944
+,,,,,,,,,,,hospital,,,,,,,,,,,,,,,,,,,,yes,,hospital,gynaecology,,,,,,,,Zübeyde Hanım Doğum ve Kadın Hastalıkları Hastanesi,,,,,,,,,,,Türkiye Cumhuriyeti Sağlık Bakanlığı,public,,,,,,,,,,,,,,,,,,,324059873,32.8396733,39.9643983
+,Keçiören/Ankara,,,,,,,,Sanatoryum Caddesi,,hospital,,,,,,,,,,,,,,,,,,,,yes,,hospital,pulmonology,,,,,,,,Atatürk Göğüs Hastalıkları ve Cerrahi Hastanesi,,,,,,,,,,,Sağlık Bakanlığı,government,Q4294365,,,,,,,,,,,,,,,,,,360595930,32.854332,40.0016941
+,Keçiören/Ankara,,,,,,,,380. Cadde,,hospital,,,,,,,,,,,,,,,,,,,,yes,,hospital,,,,,,,,,Keçiören Eğitim ve Araştırma Hastanesi,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,360597260,32.8569323,40.0020883
+,Keçiören/Ankara,,,,,,,,,,clinic,,,,,,yes,,,,,,,,,,,,,,,,clinic,,,,,,,,,Yayla Sağlık Ocağı,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,404914985,32.8239722,39.9914095
+,,,,,,,,,,,clinic,,,,,,yes,,1,,,,,,,,,,,,,,clinic,,,,,,,,,Sağlık Ocağı,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,405074754,32.8166456,39.9748288
+,Keçiören/Ankara,,,,,,,,Atlılar Sokak,,hospital,,,,,,hospital,,,,,,,,,,,,,,no,,hospital,,,,,,,,,Ankara Meslek Hastalıkları Hastanesi,,,,,,,,,,,,,,,+90 312 580 8395,,,,,,,,,,,,,,,,405321396,32.8611095,40.0079039
+,Keçiören/Ankara,,,,22,,,,Anavatan Caddesi,,hospital,,,,,,yes,,4,,,,,,,,,,,,yes,,hospital,,,,,,,,,Ankara Uluslararası Hastanesi,,,,,,,,,,24/7,,,,,,,,,,,,,,,,https://uluslararasihastanesi.com/,,,,,405601395,32.8735609,40.002211
+,Keçiören/Ankara,,,,,,,,1082. Sokak,,clinic,,,,,,yes,,,,,,,,,,,,,,,,clinic,,,,,,,,,Uyanış Sağlık Ocağı,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,405983543,32.8720926,40.0037719
+,Keçiören/Ankara,,,,,,,,,,clinic,,,,,,yes,,1,,,,,,,,,,,,,,clinic,,,,,,,,,Muhtar Fazlı İrge,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,406043257,32.8693871,40.0132608
+,Keçiören/Ankara,,,,,,,,Elvanter Sokak,,clinic,,,,,,yes,,,,,,,,,,,,,,,,clinic,,,,,,,,,Bademlik Aile Sağlığı Merkezi,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,406046989,32.8745306,40.00898560000001
+,Ankara,,Keçiören,,,,,,,,clinic,,,,,,yes,,,,,,,,,,,,,,,,clinic,,,,,,,,,Aktepe Sağlık Ocağı,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,406047014,32.8840553,39.9996934
+,Keçiören/Ankara,,,,,,,,Fatih Caddesi,,clinic,,,,,,yes,,,,,,,,,,,,,,,,clinic,,,,,,,,,Özel Bilgi Tıp Merkez,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,406128626,32.8655666,39.9881199
+,Keçiören/Ankara,,,,,,,,,,clinic,,,,,,yes,,,,,,,,,,,,,,,,clinic,,,,,,,,,Ufuktepe Sağlık Ocağı,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,406150110,32.861414,40.0160358
+,Keçiören/Ankara,,,,,,,,,,clinic,,,,,,yes,,,,,,,,,,,,,,,,clinic,,,,,,,,,Sağlık Ocağı,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,406162770,32.8603686,40.0265896
+,Keçiören/Ankara,,,,,,,,,,clinic,,,,,,yes,,,,,,,,,,,,,,,,clinic,,,,,,,,,Subay Evleri Aile Sağlığı Merkezi,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,406420486,32.8756322,39.971304
+,Keçiören/Ankara,,,,,,,,,,clinic,,,,,,yes,,,,,,,,,,,,,,,,clinic,,,,,,,,,Kuşcağız Aile Sağlığı Merkez,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,406428693,32.8446659,39.9975291
+,Keçiören/Ankara,,,,,Yükseltepe Mahallesi,,,1666. Cadde,,clinic,,,,,,yes,,,,,,,,,,,,,,,,clinic,,,,,,,,,Yükseltepe Aile Sağlığı Merkez,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,406575976,32.8097561,39.99881769999999
+,Keçiören/Ankara,,,,,,,,1052. Sokak,,clinic,,,,,,yes,,,,,,,,,,,,,,,,clinic,,,,,,,,,Şehit Ömer Öztürk Sağlık Ocağı,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,412344851,32.8808165,40.0041187
+,Keçiören/Ankara,,,,,,,,,,clinic,,,,,,yes,,,,,,,,,,,,,,,,clinic,,,,,,,,,Keçiören Kamil Ocak Aile Sağlığı Merkezi,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,413645236,32.8844963,39.9789846
+,Keçiören/Ankara,,,,,,,,969. Cadde,,clinic,,,,,,yes,,,,,,,,,,,,,,,,clinic,,,,,,,,,Yeşiltepe Aile Sağlık Merkezi,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,414389539,32.8941394,39.9932568
+,,,,,,,,,,,clinic,,,,,,yes,,,,,,,,,,,,,,,,clinic,,,,,,,,,Arslan Çocuk Kliniği,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,414910480,32.8858509,39.9730237
+,,,,,,,,,,,clinic,,,,,,yes,,,,,,,,,,,,,,,,clinic,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,417532594,32.8448616,40.0039763
+,,,,,,,,,,,clinic,,,,,,yes,,,,,,,,,,,,,,,,clinic,,,,,,,,,Durmuş Ali Yaman Aile Sağlığı Merkezi,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,421956515,32.894571,39.9765208
+,,,,,,,,,,,hospital,,,,,,,,,,,,,,,,,,,,yes,,hospital,general,,,,,,,,Gülhane Eğitim ve Araştırma Hastanesi,,,,,,,,,,,Türkiye Cumhuriyeti Sağlık Bakanlığı,public,,,,,,,,,,,,,,,,,,,424727157,32.8459548,39.968838
+,,,,,,,,,,,clinic,,,,,,yes,,,,,,,,,,,,,,,,clinic,,,,,,,,,Şenyuva Aile Sağlığı Merkezi,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,443776710,32.8911526,40.01394
+,Ankara,,Yenimahalle,,5,Varlık,06170,,Halil Sezai Erkut Caddesi,,hospital,,,,,,,,,,,https://www.facebook.com/etliksehirhastanesitr,https://www.instagram.com/etliksehirhastanesitr/,,https://twitter.com/etliksehirhast,https://www.youtube.com/channel/UCi7HbJrZM7a3QIJ5DDj4YVg,,,,etliksh.iletisim@saglik.gov.tr,yes,,hospital,general;oncology;obstetrics;kids;children;orthopaedics,,,,,,,,Ankara Etlik Şehir Hastanesi,,,,,,,,,2022-09-28,"Mo-Su 08:30-12:00,13:00-16:30",Sağlık Bakanlığı,government,Q4294365,,+90 312 797 00 00,,,,,,,,Maxar Premium-Luftbilder (Beta),,,https://etliksehir.saglik.gov.tr/,,Q16837359,Category:Ankara Etlik City Hospital,tr:Ankara Etlik Şehir Hastanesi,451822397,32.8277855,39.9636744
+,,,,,,,,,,,clinic,,,,,,yes,,,,,,,,,,,,,,,,clinic,,,,,,,,,Dr Cengiz Kılıç Aile Sağlık Merkezi,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,484204833,32.8549347,39.9980086
+,Pamuklar Mahallesi,,,,,,06210,,,,clinic,,,,,,yes,,,,,,,,,,,,,,,,clinic,general;sağlık_ocağı,,,,,,,,Yenimahalle Pamuklar Aile Sağlığı Merkezi,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,858233999,32.8078636,39.9841369
+,,,,,,,,,,,hospital,,,,,,,,,,,,,,,,,,,,yes,,hospital,,,,,,,,,Pursaklar Devlet Hastanesi,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,1005231512,32.8940968,40.049532
+,Ankara,,,,,,,,Atatürk Caddesi,,hospital,,,,,,,,,,,,,,,,,,,,,,hospital,,,,,,,,,VM Medical Park Keçiören Hastanesi,,,,,,,,,,,Medical Park,private,Q6073312,,,,,,,,,,,,,,,,,,1190327294,32.8678498,39.9753784
+,,,,,,,,,,,hospital,,,,,,,,,,,,,,,,,,,,,,hospital,,,,,,,,,Tepebaşı Ağız ve Diş Sağlığı Eğitim Araştırma Hastanesi,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,1282374141,32.8650568,39.9846417
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,clinic,,,,,,,,,Karargahtepe Aile Sağlığı Merkezi,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,1384309496,32.8582529,39.9769533
