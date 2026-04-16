@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeoViz Dashboard</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+    <style>
+        :root {
+            --cr-green: #8DC63F;
+            --cr-dark-blue: #0B3E73;
+            --cr-red: #B22025;
+            --cr-yellow: #FFC500;
+            --cr-light-blue: #00A7ED;
+            --background: #0a1628;
+            --card: #0f2240;
+            --sidebar: #071222;
+            --foreground: #f0f4f8;
+            --muted: #8ba4c0;
+            --border: #1e4976;
+            --secondary: #1a3a5c;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: system-ui, -apple-system, sans-serif; background: var(--background); color: var(--foreground); height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
+
+        header { background: var(--card); border-bottom: 1px solid var(--border); padding: 0.75rem 1.5rem; display: flex; justify-content: space-between; align-items: center; z-index: 100; }
+        .logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.2rem; color: var(--cr-green); text-decoration: none; }
+        .nav-links { display: flex; gap: 1rem; }
+        .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.85rem; font-weight: 500; padding: 4px 12px; border: 1px solid transparent; border-radius: 4px; transition: 0.2s; }
+        .nav-links a:hover { color: var(--foreground); border-color: var(--border); }
+
+        .main-layout { display: flex; flex: 1; overflow: hidden; }
+
+        /* Sidebar Styling */
+        .sidebar { width: 350px; background: var(--sidebar); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 1rem; gap: 1rem; overflow: hidden; }
+        
+        .upload-zone { border: 2px dashed var(--border); border-radius: 8px; padding: 1.5rem; text-align: center; transition: 0.2s; cursor: pointer; }
+        .upload-zone:hover { border-color: var(--cr-green); background: rgba(141, 198, 63, 0.05); }
+        .upload-zone p { font-size: 0.8rem; color: var(--muted); margin-top: 5px; }
+        .upload-zone strong { display: block; font-size: 0.9rem; color: var(--foreground); }
+        #file-input { display: none; }
+
+        .stats-grid { display: grid; grid-columns: 2; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+        .stat-card { background: var(--card); padding: 0.75rem; border-radius: 8px; border: 1px solid var(--border); }
+        .stat-label { font-size: 0.65rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; }
+        .stat-value { font-size: 1.2rem; font-weight: 700; margin-top: 2px; }
+
+        .events-list { flex: 1; background: var(--card); border-radius: 8px; border: 1px solid var(--border); overflow: hidden; display: flex; flex-direction: column; }
+        .events-list-header { padding: 0.75rem; border-bottom: 1px solid var(--border); font-size: 0.7rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+        .events-scroll { flex: 1; overflow-y: auto; }
+        .event-item { width: 100%; border: none; background: transparent; padding: 0.75rem; text-align: left; cursor: pointer; border-bottom: 1px solid var(--border); transition: 0.2s; color: var(--foreground); }
+        .event-item:hover { background: var(--secondary); }
+        .event-item.active { background: var(--secondary); border-left: 3px solid var(--cr-green); }
+        .event-item h4 { font-size: 0.85rem; margin-bottom: 2px; }
+        .event-item p { font-size: 0.75rem; color: var(--muted); }
+        .event-meta { display: flex; gap: 10px; margin-top: 6px; font-size: 0.7rem; color: var(--muted); }
+        
+        .severity-badge { font-size: 0.65rem; padding: 2px 8px; border-radius: 10px; color: white; font-weight: 600; float: right; }
+
+        /* Map Area */
+        .map-container { flex: 1; position: relative; }
+        #map { height: 100%; width: 100%; background: var(--cr-dark-blue); }
+
+        /* Leaflet Popup Overrides */
+        .leaflet-popup-content-wrapper { background: var(--card); color: var(--foreground); border-radius: 8px; border: 1px solid var(--border); }
+        .leaflet-popup-tip { background: var(--card); }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="logo">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map"><path d="m3 6 6-3 9 3 3-3v15l-3 3-9-3-6 3V6z"/><path d="M9 3v15"/><path d="M15 6v15"/></svg>
+            GeoViz Dashboard
+        </a>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="map.html">Local Map</a>
+            <a href="dashboard.html">Stats</a>
+        </div>
+    </header>
+
+    <div class="main-layout">
+        <aside class="sidebar">
+            <div class="upload-zone" onclick="document.getElementById('file-input').click()">
+                <strong>Upload Dataset</strong>
+                <p>Drop CSV file here or click to browse</p>
+                <input type="file" id="file-input" accept=".csv">
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Events</div>
+                    <div id="stat-events" class="stat-value text-primary">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Deaths</div>
+                    <div id="stat-deaths" class="stat-value" style="color: var(--cr-red)">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Countries</div>
+                    <div id="stat-countries" class="stat-value">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Displaced</div>
+                    <div id="stat-displaced" class="stat-value">0</div>
+                </div>
+            </div>
+
+            <div class="events-list">
+                <div class="events-list-header">Event Records</div>
+                <div id="events-scroll" class="events-scroll">
+                    <!-- Events will be populated here -->
+                    <div style="padding: 2rem; text-align: center; color: var(--muted); font-size: 0.8rem;">
+                        No data loaded. Please upload a CSV to view events.
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <main class="map-container">
+            <div id="map"></div>
+        </main>
+    </div>
+
+    <script>
+        const map = L.map('map', { zoomControl: false }).setView([20, 0], 2);
+        L.control.zoom({ position: 'bottomright' }).addTo(map);
+        
+        L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png', {
+            maxZoom: 19
+        }).addTo(map);
+
+        let currentMarkers = [];
+        let activePoint = null;
+
+        document.getElementById('file-input').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            Papa.parse(file, {
+                header: true,
+                dynamicTyping: true,
+                skipEmptyLines: true,
+                complete: function(results) {
+                    processData(results.data);
+                }
+            });
+        });
+
+        function getSeverityColor(sev) {
+            if (sev <= 1) return '#8DC63F';
+            if (sev <= 1.5) return '#FFC500';
+            return '#B22025';
+        }
+
+        function getSeverityLabel(sev) {
+            if (sev <= 1) return 'Low';
+            if (sev <= 1.5) return 'Medium';
+            return 'High';
+        }
+
+        function processData(data) {
+            // Filter valid data
+            const validData = data.filter(row => {
+                const lat = row.anonymous_lat ?? row.lat ?? row.latitude;
+                const lng = row.anonymous_long ?? row.long ?? row.longitude ?? row.lng;
+                return lat !== undefined && lng !== undefined && !isNaN(lat) && !isNaN(lng);
+            });
+
+            // Clear existing
+            currentMarkers.forEach(m => map.removeLayer(m));
+            currentMarkers = [];
+
+            let totalDead = 0;
+            let totalDisplaced = 0;
+            const countries = new Set();
+            const maxDisplaced = Math.max(...validData.map(d => d.Displaced || 0), 1);
+
+            const scrollContainer = document.getElementById('events-scroll');
+            scrollContainer.innerHTML = '';
+
+            validData.forEach((point, idx) => {
+                const lat = point.anonymous_lat ?? point.lat ?? point.latitude;
+                const lng = point.anonymous_long ?? point.long ?? point.longitude ?? point.lng;
+                const country = point.Country || 'Unknown';
+                const sev = point.Severity || 1;
+                const dead = point.Dead || 0;
+                const displaced = point.Displaced || 0;
+
+                totalDead += dead;
+                totalDisplaced += displaced;
+                countries.add(country);
+
+                // Add Marker
+                const color = getSeverityColor(sev);
+                const radius = 5 + (Math.sqrt(displaced) / 20);
+                const marker = L.circleMarker([lat, lng], {
+                    radius: radius,
+                    fillColor: color,
+                    color: '#0B3E73',
+                    weight: 1,
+                    fillOpacity: 0.8
+                }).addTo(map);
+
+                const popup = `
+                    <div style="min-width: 160px;">
+                        <h3 style="color: var(--cr-green); font-size: 14px; margin-bottom: 4px;">${country}</h3>
+                        <div style="font-size: 12px;">
+                            <div><strong>Cause:</strong> ${point.MainCause || 'Flood'}</div>
+                            <div><strong>Displaced:</strong> ${displaced.toLocaleString()}</div>
+                            <div><strong>Severity:</strong> ${sev}</div>
+                        </div>
+                    </div>
+                `;
+                marker.bindPopup(popup);
+                currentMarkers.push(marker);
+
+                // Add to list
+                const item = document.createElement('button');
+                item.className = 'event-item';
+                item.innerHTML = `
+                    <span class="severity-badge" style="background: ${color}">${getSeverityLabel(sev)}</span>
+                    <h4>${country}</h4>
+                    <p>${point.MainCause || 'Flood event'}</p>
+                    <div class="event-meta">
+                        <span>💀 ${dead.toLocaleString()}</span>
+                        <span>👤 ${displaced.toLocaleString()}</span>
+                    </div>
+                `;
+                item.onclick = () => {
+                    document.querySelectorAll('.event-item').forEach(el => el.classList.remove('active'));
+                    item.classList.add('active');
+                    map.setView([lat, lng], 6);
+                    marker.openPopup();
+                };
+                scrollContainer.appendChild(item);
+            });
+
+            // Update Stats
+            document.getElementById('stat-events').innerText = validData.length.toLocaleString();
+            document.getElementById('stat-deaths').innerText = totalDead.toLocaleString();
+            document.getElementById('stat-countries').innerText = countries.size;
+            document.getElementById('stat-displaced').innerText = totalDisplaced > 1000000 
+                ? (totalDisplaced / 1000000).toFixed(1) + 'M' 
+                : totalDisplaced.toLocaleString();
+
+            if (validData.length > 0) {
+                const bounds = L.featureGroup(currentMarkers).getBounds();
+                map.fitBounds(bounds);
+            }
+        }
+
+        // Load initial data if available
+        fetch('data/floodarchive.csv')
+            .then(res => res.text())
+            .then(csv => {
+                Papa.parse(csv, {
+                    header: true,
+                    dynamicTyping: true,
+                    complete: function(results) {
+                        processData(results.data);
+                    }
+                });
+            });
+    </script>
+</body>
+</html>
