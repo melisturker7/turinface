@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Central Anatolia Flood Risk Monitoring</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        body, html { margin: 0; padding: 0; font-family: sans-serif; background: #f4f4f4; }
+        #map { height: 100vh; width: 100%; }
+        #control-panel {
+            position: absolute; top: 10px; right: 10px; z-index: 1000;
+            background: white; padding: 20px; border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15); width: 280px;
+        }
+        h2 { margin: 0 0 10px 0; font-size: 18px; color: #333; }
+        .filter-group { margin-bottom: 15px; border-bottom: 1px solid #eee; pb: 10px; }
+        .filter-option { display: flex; align-items: center; margin-bottom: 8px; cursor: pointer; font-size: 13px; }
+        .filter-option input { margin-right: 10px; }
+        .legend { margin-top: 10px; font-size: 12px; }
+        .legend-item { display: flex; align-items: center; margin-top: 5px; }
+        .dot { height: 12px; width: 12px; border-radius: 50%; margin-right: 10px; }
+        .rect { height: 12px; width: 12px; margin-right: 10px; }
+        .flood-box { height: 12px; width: 12px; margin-right: 10px; border: 1px solid #0055ff; background: rgba(0, 85, 255, 0.2); }
+        .stats { font-size: 11px; color: #666; margin-top: 10px; font-style: italic; }
+    </style>
+</head>
+<body>
+
+    <div id="control-panel">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <h2>Flood Risk Monitoring</h2>
+            <div style="display: flex; gap: 5px;">
+                <a href="index.html" style="font-size: 11px; color: #2ecc71; text-decoration: none; border: 1px solid #2ecc71; padding: 2px 6px; border-radius: 4px;">Home</a>
+                <a href="global_viz.html" style="font-size: 11px; color: #00A7ED; text-decoration: none; border: 1px solid #00A7ED; padding: 2px 6px; border-radius: 4px;">Global View</a>
+            </div>
+        </div>
+        <p style="font-size: 13px; color: #555;"><b>Ankara, Konya, Kırıkkale, Eskişehir</b></p>
+        
+        <div class="filter-group">
+            <strong>Health Sites</strong>
+            <label class="filter-option"><input type="radio" name="site-filter" value="all" checked onchange="updateLayers()"> Show All</label>
+            <label class="filter-option"><input type="radio" name="site-filter" value="risk" onchange="updateLayers()"> <b>Show Only At-Risk</b></label>
+        </div>
+
+        <div class="filter-group">
+            <strong>Agriculture</strong>
+            <label class="filter-option"><input type="radio" name="agri-filter" value="all" checked onchange="updateLayers()"> Show All Farmlands</label>
+            <label class="filter-option"><input type="radio" name="agri-filter" value="risk" onchange="updateLayers()"> <b>Show Only At-Risk</b></label>
+        </div>
+
+        <div class="legend">
+            <div class="legend-item"><div class="dot" style="background: #2ecc71; border: 1px solid #27ae60;"></div> Safe Health Site</div>
+            <div class="legend-item"><div class="dot" style="background: #e74c3c; border: 1px solid #c0392b;"></div> At-Risk Health Site</div>
+            <div class="legend-item"><div class="rect" style="background: #f1c40f; opacity: 0.5; border: 1px solid #d4ac0d;"></div> Safe Farmland</div>
+            <div class="legend-item"><div class="rect" style="background: #e67e22; opacity: 0.7; border: 1px solid #d35400;"></div> At-Risk Farmland</div>
+            <div class="legend-item"><div class="flood-box"></div> Flood Extent</div>
+        </div>
+
+        <div id="stats" class="stats">Loading risk data...</div>
+    </div>
+    
+    <div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        const map = L.map('map').setView([39.0, 32.5], 7);
+
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            maxZoom: 20
+        }).addTo(map);
+
+        let allSitesLayer, riskSitesLayer, allAgriLayer, riskAgriLayer, floodLayer;
+
+        const loadFlood = fetch('data/combined_flood_extent.geojson').then(res => res.json());
+        const loadSites = fetch('data/central_anatolia_health_facilities.geojson').then(res => res.json());
+        const loadRiskSites = fetch('data/health_sites_at_flood_risk.geojson').then(res => res.json());
+        const loadAgri = fetch('data/central_anatolia_agriculture.geojson').then(res => res.json());
+        const loadRiskAgri = fetch('data/agri_at_flood_risk.geojson').then(res => res.json());
+
+        Promise.all([loadFlood, loadSites, loadRiskSites, loadAgri, loadRiskAgri]).then(([floodData, sitesData, riskSitesData, agriData, riskAgriData]) => {
+            const riskSiteIds = new Set(riskSitesData.features.map(f => f.properties.osm_id));
+            const riskAgriIds = new Set(riskAgriData.features.map(f => f.properties.osm_id));
+            
+            document.getElementById('stats').innerText = `Sites: ${sitesData.features.length} | Agri: ${agriData.features.length}`;
+
+            floodLayer = L.geoJSON(floodData, {
+                style: { color: "#0055ff", weight: 2, opacity: 0.6, fillColor: "#0055ff", fillOpacity: 0.15 }
+            }).addTo(map);
+
+            allAgriLayer = L.geoJSON(agriData, {
+                style: (f) => {
+                    const isRisk = riskAgriIds.has(f.properties.osm_id);
+                    return { color: isRisk ? "#d35400" : "#d4ac0d", weight: 1, fillColor: isRisk ? "#e67e22" : "#f1c40f", fillOpacity: isRisk ? 0.7 : 0.4 };
+                }
+            }).addTo(map);
+
+            riskAgriLayer = L.geoJSON(riskAgriData, {
+                style: { color: "#d35400", weight: 2, fillColor: "#e67e22", fillOpacity: 0.8 }
+            });
+
+            allSitesLayer = L.geoJSON(sitesData, {
+                pointToLayer: (f, latlng) => {
+                    const isRisk = riskSiteIds.has(f.properties.osm_id);
+                    return L.circleMarker(latlng, { radius: 5, fillColor: isRisk ? "#e74c3c" : "#2ecc71", color: isRisk ? "#c0392b" : "#27ae60", weight: 1, fillOpacity: 0.8 });
+                }
+            }).addTo(map);
+
+            riskSitesLayer = L.geoJSON(riskSitesData, {
+                pointToLayer: (f, latlng) => L.circleMarker(latlng, { radius: 8, fillColor: "#e74c3c", color: "#c0392b", weight: 2, fillOpacity: 0.9 })
+            });
+
+            map.fitBounds(floodLayer.getBounds());
+        });
+
+        function updateLayers() {
+            const siteFilter = document.querySelector('input[name="site-filter"]:checked').value;
+            const agriFilter = document.querySelector('input[name="agri-filter"]:checked').value;
+
+            if (siteFilter === 'all') { map.addLayer(allSitesLayer); map.removeLayer(riskSitesLayer); }
+            else { map.removeLayer(allSitesLayer); map.addLayer(riskSitesLayer); }
+
+            if (agriFilter === 'all') { map.addLayer(allAgriLayer); map.removeLayer(riskAgriLayer); }
+            else { map.removeLayer(allAgriLayer); map.addLayer(riskAgriLayer); }
+        }
+    </script>
+</body>
+</html>

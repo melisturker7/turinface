@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cleaned Dataset Visualization</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: system-ui, -apple-system, sans-serif; background: #0a1628; color: #f0f4f8; }
+    .header { background: #0f2240; padding: 16px 24px; border-bottom: 1px solid #1e4976; display: flex; align-items: center; justify-content: space-between; }
+    .header h1 { font-size: 18px; font-weight: 600; color: #8DC63F; }
+    .header .nav-links { display: flex; gap: 12px; }
+    .header a { font-size: 12px; color: #00A7ED; text-decoration: none; border: 1px solid #1e4976; padding: 4px 8px; border-radius: 4px; transition: background 0.2s; }
+    .header a:hover { background: #1a3a5c; }
+    .stats { display: flex; gap: 24px; font-size: 12px; }
+    .stat { text-align: center; }
+    .stat-value { font-size: 16px; font-weight: 600; color: #8DC63F; }
+    .stat-label { color: #8ba4c0; margin-top: 2px; }
+    #map { height: calc(100vh - 120px); background: #0B3E73; }
+    .legend { background: #0f2240; padding: 12px 24px; border-top: 1px solid #1e4976; display: flex; align-items: center; gap: 24px; font-size: 12px; }
+    .legend-title { color: #8ba4c0; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 500; }
+    .legend-item { display: flex; align-items: center; gap: 8px; }
+    .legend-dot { width: 12px; height: 12px; border-radius: 50%; border: 2px solid #0B3E73; }
+    .leaflet-popup-content-wrapper { border-radius: 8px; background: #0f2240; color: #f0f4f8; }
+    .leaflet-popup-tip { background: #0f2240; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div>
+      <h1>Cleaned Archive Data</h1>
+      <div class="nav-links" style="margin-top: 4px;">
+        <a href="index.html">← Back to Main</a>
+        <a href="global_viz.html">Global View</a>
+      </div>
+    </div>
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-value">10</div>
+        <div class="stat-label">Events</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">441,900</div>
+        <div class="stat-label">Total Displaced</div>
+      </div>
+    </div>
+  </div>
+  <div id="map"></div>
+  <div class="legend">
+    <span class="legend-title">Severity:</span>
+    <div class="legend-item"><span class="legend-dot" style="background: #8DC63F;"></span> Low</div>
+    <div class="legend-item"><span class="legend-dot" style="background: #FFC500;"></span> Medium</div>
+    <div class="legend-item"><span class="legend-dot" style="background: #B22025;"></span> High</div>
+    <span style="margin-left: auto; color: #8ba4c0;">Data source: data_cleaned.zip</span>
+  </div>
+  <script>
+    const map = L.map('map', { attributionControl: false }).setView([-18.766, 35.529], 4);
+    L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png', {
+      maxZoom: 19
+    }).addTo(map);
+
+    const data = [
+      { lat: 5.262, lng: 35.529, country: "Mozambique", cause: "Heavy rain", dead: 8, displaced: 8300, severity: 1 },
+      { lat: -23.865, lng: 34.839, country: "Mozambique", cause: "Tropical Storm Eloise", dead: 6, displaced: 0, severity: 1.5 },
+      { lat: -17.878, lng: 35.529, country: "Mozambique", cause: "Heavy Rain", dead: 135, displaced: 170000, severity: 1.5 },
+      { lat: -22.560, lng: 18.491, country: "Namibia", cause: "Heavy rain", dead: 10, displaced: 40000, severity: 2 },
+      { lat: -29.000, lng: 24.991, country: "South Africa", cause: "Flooding", dead: 45, displaced: 23000, severity: 1.5 },
+      { lat: -19.015, lng: 29.154, country: "Zimbabwe", cause: "Cyclone Idai", dead: 23, displaced: 15000, severity: 2 },
+      { lat: -13.254, lng: 34.302, country: "Malawi", cause: "Heavy rainfall", dead: 56, displaced: 89000, severity: 1.5 },
+      { lat: -18.766, lng: 46.869, country: "Madagascar", cause: "Tropical cyclone", dead: 34, displaced: 45000, severity: 2 },
+      { lat: -22.328, lng: 24.684, country: "Botswana", cause: "Flash floods", dead: 3, displaced: 5600, severity: 1 },
+      { lat: -6.369, lng: 34.888, country: "Tanzania", cause: "Heavy rain", dead: 67, displaced: 78000, severity: 1.5 }
+    ];
+
+    data.forEach(point => {
+      const color = point.severity <= 1 ? '#8DC63F' : (point.severity <= 1.5 ? '#FFC500' : '#B22025');
+      const radius = 6 + (Math.sqrt(point.displaced) / 20);
+      
+      L.circleMarker([point.lat, point.lng], {
+        radius: radius,
+        fillColor: color,
+        color: "#0B3E73",
+        weight: 2,
+        opacity: 1,
+        fillOpacity: 0.85
+      }).addTo(map).bindPopup(`
+        <div style="min-width: 160px;">
+          <h3 style="margin: 0 0 4px 0; font-size: 14px;">${point.country}</h3>
+          <div style="font-size: 12px; color: #8ba4c0;">
+            <div><strong>Cause:</strong> ${point.cause}</div>
+            <div><strong>Deaths:</strong> ${point.dead}</div>
+            <div><strong>Displaced:</strong> ${point.displaced.toLocaleString()}</div>
+            <div><strong>Severity:</strong> ${point.severity}</div>
+          </div>
+        </div>
+      `);
+    });
+  </script>
+</body>
+</html>

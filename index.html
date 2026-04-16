@@ -3,121 +3,160 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Central Anatolia Flood Risk Monitoring</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <title>TurinFace: Disaster Risk Monitoring</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.0/lucide.min.css" />
     <style>
-        body, html { margin: 0; padding: 0; font-family: sans-serif; background: #f4f4f4; }
-        #map { height: 100vh; width: 100%; }
-        #control-panel {
-            position: absolute; top: 10px; right: 10px; z-index: 1000;
-            background: white; padding: 20px; border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.15); width: 280px;
+        :root {
+            --cr-green: #8DC63F;
+            --cr-dark-blue: #0B3E73;
+            --cr-dark-green: #10502F;
+            --cr-red: #B22025;
+            --cr-light-blue: #00A7ED;
+            --cr-yellow: #FFC500;
+            --background: #0a1628;
+            --card: #0f2240;
+            --foreground: #f0f4f8;
+            --muted: #8ba4c0;
+            --border: #1e4976;
         }
-        h2 { margin: 0 0 10px 0; font-size: 18px; color: #333; }
-        .filter-group { margin-bottom: 15px; border-bottom: 1px solid #eee; pb: 10px; }
-        .filter-option { display: flex; align-items: center; margin-bottom: 8px; cursor: pointer; font-size: 13px; }
-        .filter-option input { margin-right: 10px; }
-        .legend { margin-top: 10px; font-size: 12px; }
-        .legend-item { display: flex; align-items: center; margin-top: 5px; }
-        .dot { height: 12px; width: 12px; border-radius: 50%; margin-right: 10px; }
-        .rect { height: 12px; width: 12px; margin-right: 10px; }
-        .flood-box { height: 12px; width: 12px; margin-right: 10px; border: 1px solid #0055ff; background: rgba(0, 85, 255, 0.2); }
-        .stats { font-size: 11px; color: #666; margin-top: 10px; font-style: italic; }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', system-ui, -apple-system, sans-serif; background: var(--background); color: var(--foreground); line-height: 1.6; }
+
+        /* Navigation */
+        nav {
+            background: var(--card);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .nav-logo { font-weight: 800; font-size: 1.5rem; color: var(--cr-green); text-decoration: none; }
+        .nav-links { display: flex; gap: 2rem; }
+        .nav-links a { color: var(--foreground); text-decoration: none; font-weight: 500; font-size: 0.9rem; transition: color 0.2s; }
+        .nav-links a:hover { color: var(--cr-light-blue); }
+
+        /* Hero Section */
+        .hero {
+            padding: 4rem 2rem;
+            text-align: center;
+            background: linear-gradient(to bottom, var(--cr-dark-blue), var(--background));
+        }
+        .hero h1 { font-size: 3rem; margin-bottom: 1rem; color: var(--foreground); }
+        .hero p { max-width: 800px; margin: 0 auto 2rem; font-size: 1.2rem; color: var(--muted); }
+
+        /* Main Content */
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 2rem 4rem; }
+
+        /* App Links Grid */
+        .app-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-bottom: 4rem; }
+        .app-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 2rem; transition: transform 0.2s, border-color 0.2s; text-decoration: none; color: inherit; }
+        .app-card:hover { transform: translateY(-5px); border-color: var(--cr-green); }
+        .app-card h3 { color: var(--cr-green); margin-bottom: 0.75rem; font-size: 1.3rem; }
+        .app-card p { color: var(--muted); font-size: 0.9rem; }
+
+        /* Dataset Table */
+        .section-title { font-size: 1.8rem; margin-bottom: 2rem; color: var(--cr-light-blue); display: flex; align-items: center; gap: 0.5rem; }
+        .dataset-list { background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.9rem; text-align: left; }
+        th { background: rgba(255, 255, 255, 0.05); padding: 1rem; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--border); }
+        td { padding: 1rem; border-bottom: 1px solid var(--border); vertical-align: middle; }
+        tr:last-child td { border-bottom: none; }
+        .format-badge { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 4px; background: var(--cr-dark-blue); color: var(--cr-light-blue); font-size: 0.75rem; font-weight: 700; }
+
+        /* Footer */
+        footer { padding: 4rem 2rem; border-top: 1px solid var(--border); text-align: center; color: var(--muted); font-size: 0.8rem; }
     </style>
 </head>
 <body>
 
-    <div id="control-panel">
-        <h2>Flood Risk Monitoring</h2>
-        <p style="font-size: 13px; color: #555;"><b>Ankara, Konya, Kırıkkale, Eskişehir</b></p>
-        
-        <div class="filter-group">
-            <strong>Health Sites</strong>
-            <label class="filter-option"><input type="radio" name="site-filter" value="all" checked onchange="updateLayers()"> Show All</label>
-            <label class="filter-option"><input type="radio" name="site-filter" value="risk" onchange="updateLayers()"> <b>Show Only At-Risk</b></label>
+    <nav>
+        <a href="index.html" class="nav-logo">TurinFace</a>
+        <div class="nav-links">
+            <a href="map.html">Local Map</a>
+            <a href="dashboard.html">Charts</a>
+            <a href="global_viz.html">Global View</a>
+            <a href="cleaned_data_viz.html">CSV Visualizer</a>
         </div>
+    </nav>
 
-        <div class="filter-group">
-            <strong>Agriculture</strong>
-            <label class="filter-option"><input type="radio" name="agri-filter" value="all" checked onchange="updateLayers()"> Show All Farmlands</label>
-            <label class="filter-option"><input type="radio" name="agri-filter" value="risk" onchange="updateLayers()"> <b>Show Only At-Risk</b></label>
-        </div>
+    <header class="hero">
+        <h1>TurinFace: Disaster Monitoring</h1>
+        <p>A comprehensive platform for visualizing flood risks, historical impacts, and vulnerable infrastructure across local and global scales.</p>
+    </header>
 
-        <div class="legend">
-            <div class="legend-item"><div class="dot" style="background: #2ecc71; border: 1px solid #27ae60;"></div> Safe Health Site</div>
-            <div class="legend-item"><div class="dot" style="background: #e74c3c; border: 1px solid #c0392b;"></div> At-Risk Health Site</div>
-            <div class="legend-item"><div class="rect" style="background: #f1c40f; opacity: 0.5; border: 1px solid #d4ac0d;"></div> Safe Farmland</div>
-            <div class="legend-item"><div class="rect" style="background: #e67e22; opacity: 0.7; border: 1px solid #d35400;"></div> At-Risk Farmland</div>
-            <div class="legend-item"><div class="flood-box"></div> Flood Extent</div>
-        </div>
+    <div class="container">
+        <section class="app-grid">
+            <a href="map.html" class="app-card">
+                <h3>Risk Monitoring Map</h3>
+                <p>Interactive dashboard for central Anatolia (Ankara, Konya, etc.) monitoring health facilities and agricultural zones at risk from current flood extents.</p>
+            </a>
+            <a href="dashboard.html" class="app-card">
+                <h3>Impact Analysis Charts</h3>
+                <p>Data-driven insights into global flood trends, causes, and displacement metrics using historical archive data from 1985 to the present.</p>
+            </a>
+            <a href="global_viz.html" class="app-card">
+                <h3>Global Flood Archive</h3>
+                <p>A specialized map visualizer showing historical flood events worldwide, scaled by severity and displacement population.</p>
+            </a>
+        </section>
 
-        <div id="stats" class="stats">Loading risk data...</div>
+        <section>
+            <h2 class="section-title">Project Datasets</h2>
+            <div class="dataset-list">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Dataset Name</th>
+                            <th>Source</th>
+                            <th>Format</th>
+                            <th>Date Retrieved</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Global Flood Archive</strong></td>
+                            <td>Dartmouth Flood Observatory</td>
+                            <td><span class="format-badge">CSV</span></td>
+                            <td>April 16, 2026</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Health Facilities (Central Anatolia)</strong></td>
+                            <td>OpenStreetMap (OSM)</td>
+                            <td><span class="format-badge">GEOJSON</span></td>
+                            <td>April 16, 2026</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Agricultural Zones</strong></td>
+                            <td>OpenStreetMap (OSM)</td>
+                            <td><span class="format-badge">GEOJSON</span></td>
+                            <td>April 16, 2026</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Regional Flood Extent</strong></td>
+                            <td>Satellite Imagery (Copernicus)</td>
+                            <td><span class="format-badge">GEOJSON</span></td>
+                            <td>April 16, 2026</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Risk-Identified Sites</strong></td>
+                            <td>Derived (TurinFace Analysis)</td>
+                            <td><span class="format-badge">CSV/GEOJSON</span></td>
+                            <td>Generated On-site</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
     </div>
-    
-    <div id="map"></div>
 
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script>
-        const map = L.map('map').setView([39.0, 32.5], 7);
+    <footer>
+        <p>&copy; 2026 TurinFace Project. Built for Resilience & Rapid Disaster Response.</p>
+    </footer>
 
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-            maxZoom: 20
-        }).addTo(map);
-
-        let allSitesLayer, riskSitesLayer, allAgriLayer, riskAgriLayer, floodLayer;
-
-        const loadFlood = fetch('data/combined_flood_extent.geojson').then(res => res.json());
-        const loadSites = fetch('data/central_anatolia_health_facilities.geojson').then(res => res.json());
-        const loadRiskSites = fetch('data/health_sites_at_flood_risk.geojson').then(res => res.json());
-        const loadAgri = fetch('data/central_anatolia_agriculture.geojson').then(res => res.json());
-        const loadRiskAgri = fetch('data/agri_at_flood_risk.geojson').then(res => res.json());
-
-        Promise.all([loadFlood, loadSites, loadRiskSites, loadAgri, loadRiskAgri]).then(([floodData, sitesData, riskSitesData, agriData, riskAgriData]) => {
-            const riskSiteIds = new Set(riskSitesData.features.map(f => f.properties.osm_id));
-            const riskAgriIds = new Set(riskAgriData.features.map(f => f.properties.osm_id));
-            
-            document.getElementById('stats').innerText = `Sites: ${sitesData.features.length} | Agri: ${agriData.features.length}`;
-
-            floodLayer = L.geoJSON(floodData, {
-                style: { color: "#0055ff", weight: 2, opacity: 0.6, fillColor: "#0055ff", fillOpacity: 0.15 }
-            }).addTo(map);
-
-            allAgriLayer = L.geoJSON(agriData, {
-                style: (f) => {
-                    const isRisk = riskAgriIds.has(f.properties.osm_id);
-                    return { color: isRisk ? "#d35400" : "#d4ac0d", weight: 1, fillColor: isRisk ? "#e67e22" : "#f1c40f", fillOpacity: isRisk ? 0.7 : 0.4 };
-                }
-            }).addTo(map);
-
-            riskAgriLayer = L.geoJSON(riskAgriData, {
-                style: { color: "#d35400", weight: 2, fillColor: "#e67e22", fillOpacity: 0.8 }
-            });
-
-            allSitesLayer = L.geoJSON(sitesData, {
-                pointToLayer: (f, latlng) => {
-                    const isRisk = riskSiteIds.has(f.properties.osm_id);
-                    return L.circleMarker(latlng, { radius: 5, fillColor: isRisk ? "#e74c3c" : "#2ecc71", color: isRisk ? "#c0392b" : "#27ae60", weight: 1, fillOpacity: 0.8 });
-                }
-            }).addTo(map);
-
-            riskSitesLayer = L.geoJSON(riskSitesData, {
-                pointToLayer: (f, latlng) => L.circleMarker(latlng, { radius: 8, fillColor: "#e74c3c", color: "#c0392b", weight: 2, fillOpacity: 0.9 })
-            });
-
-            map.fitBounds(floodLayer.getBounds());
-        });
-
-        function updateLayers() {
-            const siteFilter = document.querySelector('input[name="site-filter"]:checked').value;
-            const agriFilter = document.querySelector('input[name="agri-filter"]:checked').value;
-
-            if (siteFilter === 'all') { map.addLayer(allSitesLayer); map.removeLayer(riskSitesLayer); }
-            else { map.removeLayer(allSitesLayer); map.addLayer(riskSitesLayer); }
-
-            if (agriFilter === 'all') { map.addLayer(allAgriLayer); map.removeLayer(riskAgriLayer); }
-            else { map.removeLayer(allAgriLayer); map.addLayer(riskAgriLayer); }
-        }
-    </script>
 </body>
 </html>
