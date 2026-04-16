@@ -117,7 +117,17 @@
             // 2. Line chart: Flood events per year
             const yearCounts = {};
             data.forEach(row => {
-                const year = row.Began.split('-')[0];
+                let year = null;
+                if (row.Began) {
+                    const beganStr = String(row.Began);
+                    if (beganStr.includes('-')) {
+                        year = beganStr.split('-')[0];
+                    } else if (beganStr.length >= 4) {
+                        // Handle numeric years like 37685 or just 2024
+                        const possibleYear = parseInt(beganStr.substring(0, 4));
+                        if (possibleYear > 1900 && possibleYear < 2100) year = possibleYear;
+                    }
+                }
                 if (year) yearCounts[year] = (yearCounts[year] || 0) + 1;
             });
             const sortedYears = Object.keys(yearCounts).sort();

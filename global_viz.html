@@ -225,8 +225,8 @@
             skipEmptyLines: true,
             complete: function(results) {
                 const data = results.data.filter(row => {
-                    const lat = row.anonymous_lat || row.lat;
-                    const lng = row.anonymous_long || row.long;
+                    const lat = row.anonymous_lat !== undefined ? row.anonymous_lat : (row.lat !== undefined ? row.lat : row.Latitude);
+                    const lng = row.anonymous_long !== undefined ? row.anonymous_long : (row.long !== undefined ? row.long : (row.lng !== undefined ? row.lng : row.Longitude));
                     return lat !== undefined && lng !== undefined && !isNaN(lat) && !isNaN(lng);
                 });
 
@@ -244,8 +244,8 @@
             const maxDisplaced = Math.max(...data.map(d => d.Displaced || 0), 1);
 
             data.forEach(point => {
-                const lat = point.anonymous_lat || point.lat;
-                const lng = point.anonymous_long || point.long;
+                const lat = point.anonymous_lat !== undefined ? point.anonymous_lat : (point.lat !== undefined ? point.lat : point.Latitude);
+                const lng = point.anonymous_long !== undefined ? point.anonymous_long : (point.long !== undefined ? point.long : (point.lng !== undefined ? point.lng : point.Longitude));
                 const displaced = point.Displaced || 0;
                 const severity = point.Severity || 1;
                 totalDisplaced += displaced;
