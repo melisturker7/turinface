@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{TITLE}}</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+    <style>
+        :root {
+            --primary: #8DC63F; --accent: #00A7ED; --danger: #B22025; --warning: #FFC500;
+            --background: #0a1628; --card: #0f2240; --sidebar: #071222;
+            --foreground: #f0f4f8; --muted: #8ba4c0; --border: #1e4976; --secondary: #1a3a5c;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: system-ui, -apple-system, sans-serif; background: var(--background); color: var(--foreground); height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
+        header { background: var(--card); border-bottom: 1px solid var(--border); padding: 0.75rem 1.5rem; display: flex; justify-content: space-between; align-items: center; z-index: 100; }
+        .logo { font-weight: 800; font-size: 1.2rem; color: var(--primary); text-decoration: none; }
+        .main-layout { display: flex; flex: 1; overflow: hidden; }
+        .sidebar { width: 350px; background: var(--sidebar); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 1rem; gap: 1rem; overflow: hidden; }
+        .upload-zone { border: 2px dashed var(--border); border-radius: 8px; padding: 1.5rem; text-align: center; cursor: pointer; }
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+        .stat-card { background: var(--card); padding: 0.75rem; border-radius: 8px; border: 1px solid var(--border); }
+        .events-list { flex: 1; background: var(--card); border-radius: 8px; border: 1px solid var(--border); overflow: hidden; display: flex; flex-direction: column; }
+        .events-scroll { flex: 1; overflow-y: auto; }
+        .event-item { width: 100%; border: none; background: transparent; padding: 0.75rem; text-align: left; cursor: pointer; border-bottom: 1px solid var(--border); color: var(--foreground); }
+        .event-item.active { background: var(--secondary); border-left: 3px solid var(--primary); }
+        .map-container { flex: 1; position: relative; }
+        #map { height: 100%; width: 100%; background: #0B3E73; }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo">{{TITLE}}</a>
+    </header>
+    <div class="main-layout">
+        <aside class="sidebar">
+            <div class="upload-zone" onclick="document.getElementById('file-input').click()">
+                <strong>Upload CSV</strong>
+                <input type="file" id="file-input" accept=".csv" style="display:none">
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card"><div id="stat-events" class="stat-value">0</div></div>
+                <!-- Add more stats as needed -->
+            </div>
+            <div class="events-list"><div id="events-scroll" class="events-scroll"></div></div>
+        </aside>
+        <main class="map-container"><div id="map"></div></main>
+    </div>
+    <script>
+        const map = L.map('map', { zoomControl: false }).setView([20, 0], 2);
+        L.control.zoom({ position: 'bottomright' }).addTo(map);
+        
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+            subdomains: 'abcd',
+            maxZoom: 20
+        }).addTo(map);
+
+        let currentMarkers = [];
+
+        document.getElementById('file-input').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            Papa.parse(file, {
+                header: true,
+                dynamicTyping: true,
+                skipEmptyLines: true,
+                complete: function(results) {
+                    processData(results.data);
+                }
+            });
+        });
+
+        function processData(data) {
+            const validData = data.filter(row => {
+                const lat = row.lat ?? row.latitude ?? row.anonymous_lat;
+                const lng = row.long ?? row.lng ?? row.longitude ?? row.anonymous_long;
+                return lat !== undefined && lng !== undefined && !isNaN(lat) && !isNaN(lng);
+            });
+
+            currentMarkers.forEach(m => map.removeLayer(m));
+            currentMarkers = [];
+            const scrollContainer = document.getElementById('events-scroll');
+            scrollContainer.innerHTML = '';
+
+            validData.forEach(point => {
+                const lat = point.lat ?? point.latitude ?? point.anonymous_lat;
+                const lng = point.long ?? point.lng ?? point.longitude ?? point.anonymous_long;
+                
+                const marker = L.circleMarker([lat, lng], {
+                    radius: 8,
+                    fillColor: '#8DC63F',
+                    color: '#0B3E73',
+                    weight: 1,
+                    fillOpacity: 0.8
+                }).addTo(map);
+                
+                currentMarkers.push(marker);
+
+                const item = document.createElement('button');
+                item.className = 'event-item';
+                item.innerHTML = `<h4>${point.Country || 'Event'}</h4><p>${point.MainCause || ''}</p>`;
+                item.onclick = () => {
+                    map.setView([lat, lng], 8);
+                    marker.openPopup();
+                };
+                scrollContainer.appendChild(item);
+            });
+
+            document.getElementById('stat-events').innerText = validData.length.toLocaleString();
+            if (validData.length > 0) map.fitBounds(L.featureGroup(currentMarkers).getBounds());
+        }
+    </script>
+</body>
+</html>

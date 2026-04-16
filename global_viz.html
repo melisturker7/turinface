@@ -188,6 +188,7 @@
     </div>
 
     <script>
+        // Updated: 2026-04-16 17:15 (To force cache refresh)
         const map = L.map('map', { 
             attributionControl: false,
             zoomControl: false 
@@ -202,7 +203,7 @@
         }).addTo(map);
 
         L.control.attribution({ prefix: false, position: 'bottomright' })
-          .addAttribution('&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>')
+          .addAttribution('&copy; <a href="https://carto.com/attributions">CARTO</a>')
           .addTo(map);
 
         function getSeverityColor(severity) {

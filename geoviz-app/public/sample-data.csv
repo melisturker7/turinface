@@ -1,0 +1,11 @@
+ID,GlideNumber,Country,multi_country,anonymous_long,anonymous_lat,Area,Began,Ended,Validation,Dead,Displaced,MainCause,Severity,categorised_cause
+2178,0,Mozambique,Multi-country,35.529,5.262,137205.77,37685,37696,News,8,8300,Heavy rain,1,Heavy Rain
+5015,,Mozambique,Multi-country,34.839,-23.865,1148874.13,44218,44221,FloodList,6,0,Tropical Storm Eloise,1.5,Storm
+4023,,Mozambique,Multi-country,35.529,-17.878,83155.21,41291,41337,News,135,170000,Heavy Rain,1.5,Heavy Rain
+2430,0,Namibia,Multi-country,18.491,-22.560,615606.17,38018,38140,News,10,40000,Heavy rain,2,Heavy Rain
+3156,,South Africa,Multi-country,24.991,-29.000,121430.22,39456,39490,News,45,23000,Flooding,1.5,Flood
+4521,,Zimbabwe,Multi-country,29.154,-19.015,390757.00,42567,42590,News,23,15000,Cyclone Idai,2,Storm
+2987,,Malawi,Multi-country,34.302,-13.254,118484.00,38890,38920,News,56,89000,Heavy rainfall,1.5,Heavy Rain
+3478,,Madagascar,Multi-country,46.869,-18.766,587041.00,40123,40145,News,34,45000,Tropical cyclone,2,Storm
+4102,,Botswana,Multi-country,24.684,-22.328,581730.00,41456,41478,News,3,5600,Flash floods,1,Flood
+3890,,Tanzania,Multi-country,34.888,-6.369,947300.00,40789,40812,News,67,78000,Heavy rain,1.5,Heavy Rain
