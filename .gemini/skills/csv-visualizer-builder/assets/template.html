@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{TITLE}}</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+  <style>
+    :root {
+      --primary: #8DC63F;
+      --accent: #00A7ED;
+      --danger: #B22025;
+      --background: #0a1628;
+      --card: #0f2240;
+      --foreground: #f0f4f8;
+      --muted: #8ba4c0;
+      --border: #1e4976;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: system-ui, -apple-system, sans-serif; background: var(--background); color: var(--foreground); display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+    header { background: var(--card); padding: 1rem 1.5rem; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+    h1 { font-size: 1.25rem; color: var(--primary); }
+    #map { flex: 1; background: #0B3E73; }
+    .controls { background: var(--card); padding: 1rem; border-top: 1px solid var(--border); display: flex; gap: 1rem; align-items: center; }
+    .upload-btn { background: var(--primary); color: var(--background); padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; font-weight: 600; font-size: 0.875rem; }
+    #csv-file { display: none; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>{{TITLE}}</h1>
+    <label class="upload-btn" for="csv-file">Upload CSV</label>
+    <input type="file" id="csv-file" accept=".csv" />
+  </header>
+  <div id="map"></div>
+  <script>
+    const map = L.map('map').setView([20, 0], 2);
+    L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png', { maxZoom: 19 }).addTo(map);
+
+    document.getElementById('csv-file').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      Papa.parse(file, {
+        header: true,
+        dynamicTyping: true,
+        skipEmptyLines: true,
+        complete: function(results) {
+          renderData(results.data);
+        }
+      });
+    });
+
+    function renderData(data) {
+      // Logic for mapping columns to markers
+      // Supports: lat, long, anonymous_lat, anonymous_long, etc.
+    }
+  </script>
+</body>
+</html>
