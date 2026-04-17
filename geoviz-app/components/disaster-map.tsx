@@ -29,11 +29,11 @@ function getSeverityColor(severity: number): string {
 }
 
 function getMarkerSize(displaced: number): number {
-  if (displaced >= 100000) return 24
-  if (displaced >= 50000) return 20
-  if (displaced >= 10000) return 16
-  if (displaced >= 1000) return 12
-  return 10
+  if (displaced <= 0) return 8;
+  // Logarithmic scaling: 4 + log10(displaced) * 6
+  // 1k -> 22px, 10k -> 28px, 100k -> 34px, 1M -> 40px, 10M -> 46px, 100M -> 52px
+  const size = 8 + (Math.log10(displaced) * 6);
+  return Math.min(size, 60); // Cap at 60px diameter
 }
 
 export function DisasterMap({ data, selectedPoint, onSelectPoint }: DisasterMapProps) {
@@ -90,9 +90,9 @@ export function DisasterMap({ data, selectedPoint, onSelectPoint }: DisasterMapP
         radius: size / 2,
         fillColor: color,
         color: CR_COLORS.darkBlue,
-        weight: 2,
-        opacity: 1,
-        fillOpacity: 0.85,
+        weight: 1.5,
+        opacity: 0.8,
+        fillOpacity: 0.6,
       }).addTo(mapRef.current!)
 
       const severityLabel = point.Severity <= 1 ? "Low" : point.Severity <= 1.5 ? "Medium" : "High"

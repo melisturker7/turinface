@@ -17,23 +17,21 @@ function getSeverityColor(severity: number): string {
   return CR_COLORS.red
 }
 
-function getMarkerRadius(displaced: number, maxDisplaced: number): number {
-  const minRadius = 6
-  const maxRadius = 20
-  if (maxDisplaced === 0) return minRadius
-  return minRadius + (displaced / maxDisplaced) * (maxRadius - minRadius)
+function getMarkerRadius(displaced: number): number {
+  if (displaced <= 0) return 4
+  // Logarithmic scaling for better handling of outliers
+  const radius = 4 + (Math.log10(displaced) * 3)
+  return Math.min(radius, 30) // Cap radius at 30px
 }
 
 export function generateStandaloneHTML(data: DataPoint[], title: string): string {
-  const maxDisplaced = Math.max(...data.map((d) => d.displaced || 0), 1)
-  
   // Calculate center point
   const avgLat = data.reduce((sum, d) => sum + d.lat, 0) / data.length
   const avgLng = data.reduce((sum, d) => sum + d.lng, 0) / data.length
 
   const markersJS = data.map((point, index) => {
     const color = getSeverityColor(point.severity || 1)
-    const radius = getMarkerRadius(point.displaced || 0, maxDisplaced)
+    const radius = getMarkerRadius(point.displaced || 0)
     const popupContent = `
       <div style="font-family: system-ui, sans-serif; min-width: 200px;">
         <h3 style="margin: 0 0 8px 0; font-size: 14px; font-weight: 600;">${point.country || "Unknown"}</h3>

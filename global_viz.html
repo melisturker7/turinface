@@ -212,11 +212,11 @@
             return '#B22025';
         }
 
-        function getMarkerRadius(displaced, maxDisplaced) {
-            const minRadius = 4;
-            const maxRadius = 30;
-            if (!displaced || maxDisplaced === 0) return minRadius;
-            return minRadius + (Math.sqrt(displaced) / Math.sqrt(maxDisplaced)) * (maxRadius - minRadius);
+        function getMarkerRadius(displaced) {
+            if (!displaced || displaced <= 0) return 4;
+            // Logarithmic scaling for better handling of massive outliers
+            const radius = 4 + (Math.log10(displaced) * 4);
+            return Math.min(radius, 40); // Cap radius at 40px
         }
 
         const csvFilePath = 'data/floodarchive.csv';
@@ -254,7 +254,7 @@
                 totalDisplaced += displaced;
 
                 const color = getSeverityColor(severity);
-                const radius = getMarkerRadius(displaced, maxDisplaced);
+                const radius = getMarkerRadius(displaced);
 
                 const popupContent = `
                     <div style="min-width: 200px;">
@@ -272,10 +272,10 @@
                 L.circleMarker([lat, lng], {
                     radius: radius,
                     fillColor: color,
-                    color: '#0B3E73',
-                    weight: 1,
-                    opacity: 1,
-                    fillOpacity: 0.7
+                    color: '#071222',
+                    weight: 1.5,
+                    opacity: 0.8,
+                    fillOpacity: 0.6
                 }).addTo(map).bindPopup(popupContent);
             });
 

@@ -199,13 +199,18 @@
 
                 // Add Marker
                 const color = getSeverityColor(sev);
-                const radius = 5 + (Math.sqrt(displaced) / 20);
+                
+                // Improved Scaling: Logarithmic scale with a cap
+                // log10(100M) is 8, so radius will be 5 + 8 * 6 = 53px max for massive events
+                const radius = 4 + (Math.log10(Math.max(1, displaced)) * 5.5);
+                const cappedRadius = Math.min(radius, 60); // Cap at 60px to prevent map coverage
+                
                 const marker = L.circleMarker([lat, lng], {
-                    radius: radius,
+                    radius: cappedRadius,
                     fillColor: color,
-                    color: '#0B3E73',
-                    weight: 1,
-                    fillOpacity: 0.8
+                    color: '#071222', // Darker border for better contrast
+                    weight: 1.5,
+                    fillOpacity: 0.6 // Increased transparency for better overlapping view
                 }).addTo(map);
 
                 const popup = `

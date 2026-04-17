@@ -78,15 +78,18 @@
 
     data.forEach(point => {
       const color = point.severity <= 1 ? '#8DC63F' : (point.severity <= 1.5 ? '#FFC500' : '#B22025');
-      const radius = 6 + (Math.sqrt(point.displaced) / 20);
+      
+      // Improved Scaling: Logarithmic scale with a cap
+      const radius = 4 + (Math.log10(Math.max(1, point.displaced)) * 5);
+      const cappedRadius = Math.min(radius, 50);
       
       L.circleMarker([point.lat, point.lng], {
-        radius: radius,
+        radius: cappedRadius,
         fillColor: color,
         color: "#0B3E73",
-        weight: 2,
-        opacity: 1,
-        fillOpacity: 0.85
+        weight: 1.5,
+        opacity: 0.8,
+        fillOpacity: 0.6
       }).addTo(map).bindPopup(`
         <div style="min-width: 160px;">
           <h3 style="margin: 0 0 4px 0; font-size: 14px;">${point.country}</h3>
