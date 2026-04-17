@@ -127,7 +127,7 @@
     </div>
 
     <script>
-        const map = L.map('map', { zoomControl: false }).setView([20, 0], 2);
+        const map = L.map('map', { zoomControl: false }).setView([39, 35], 6);
         L.control.zoom({ position: 'bottomright' }).addTo(map);
         
         L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
@@ -255,10 +255,12 @@
                 ? (totalDisplaced / 1000000).toFixed(1) + 'M' 
                 : totalDisplaced.toLocaleString();
 
+            /* 
             if (validData.length > 0) {
                 const bounds = L.featureGroup(currentMarkers).getBounds();
                 map.fitBounds(bounds);
             }
+            */
         }
 
         // Load initial data if available
